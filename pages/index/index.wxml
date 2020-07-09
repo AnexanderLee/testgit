@@ -1,0 +1,212 @@
+<!--index.wxml-->
+<!-- <view class="container"> -->
+<view class="surrounding" wx:if='{{index === 0}}'>
+  <view class="index_map">
+    <map id="map" longitude="114.267472" latitude="30.588674" scale="14" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap" polyline="{{polyline}}" circle="{{circle}}" bindregionchange="regionchange" show-location style="width: 100%; height: 62vh;"></map>
+  </view>
+  <view class="display" style="height:{{popupHeight}};">
+    <view class="display_title" bindtap="showPopup">
+      <view class="line">
+        <view class="line_cont"></view>
+      </view>
+      <view class="title_main">
+        <view class="main_left">
+          <view class="location">
+            <van-icon class="location_icon" name="location" />
+            <text class="location_text">附近1km内</text>
+          </view>
+          <view class="message">
+            <text class="mes_con">身边无公开疫情</text>
+          </view>
+        </view>
+        <view class="main_right"></view>
+      </view>
+    </view>
+    <view class="display_list" >
+      <van-tabs animated sticky swipeable>
+        <!-- <scroll-view class="scroll" style="height:{{popupHeight}};" scroll-y > -->
+          <van-tab title="确诊病例">
+            <scroll-view class="scroll_left" style="height:{{popupHeight}};" scroll-y >
+              <van-collapse value="{{ activeNames }}" bind:change="onChange">
+                <block wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20]}}" wx:for-item="i" wx:key='i'>
+                  <van-collapse-item title="确诊病例{{i}}" name="{{i}}" value='10.36km' label='最新病例发现于{{i}}天前' >
+                    <van-icon slot="icon" name="warning-o" class="warning_icon"></van-icon>
+                    确诊病例{{i}}基本信息
+                  </van-collapse-item>
+                </block>
+              </van-collapse>
+            </scroll-view>
+            
+          </van-tab>
+          <van-tab title="发热门诊">
+            <scroll-view class="scroll_right" style="height:{{popupHeight}};" scroll-y >
+              <van-cell-group>
+                <block  wx:for="{{[1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20]}}" wx:for-item="i" wx:key='i'>
+                  <van-cell center title="发热门诊{{i}}" value="{{i}}km"  label="发热门诊{{i}}地址" >
+                    <van-icon slot="right-icon" name="map-marked" class="custom-icon" />
+                  </van-cell>
+                </block>
+                
+              </van-cell-group>
+            </scroll-view>
+          </van-tab>
+        <!-- </scroll-view> -->
+
+      </van-tabs>
+    </view>
+    <view >
+      <view></view>
+      <view></view>
+      <view></view>
+      <view></view>
+      <view></view>
+      <view></view>
+      
+    </view>
+    <!-- <van-icon  name="arrow-up" /> -->
+  </view>
+</view>
+<view class="sa_data" wx:if='{{index === 1}}'>
+  <image class='one' src="https://img-blog.csdnimg.cn/20200620221159162.png"></image>
+  <image class="two" src="https://img-blog.csdnimg.cn/20200620221533149.png"></image>
+  <image class="three" src="https://img-blog.csdnimg.cn/20200620221723157.png"></image>
+</view>
+<view class="stand_search" wx:if='{{index === 2}}'>
+  <view class='search_tip'>
+    <view class="tip_title">
+      <text class="title_left">入境/境内</text>
+      <text class="title_right">同乘接触者查询</text>
+    </view>
+    <view class="tip_con">
+        本服务目前支持14天内境内出行（火车、飞机、客运汽车、客船）和入境（火车、飞机、轮船）新冠肺炎确诊/疑似患者和已检出的无症状感染者同乘接触者查询。
+    </view>
+  </view>
+  <view class="search_form">
+    <view class="form_main">
+      <view class="form_title">
+        身份信息
+      </view>
+      
+      <view class="form_out_type" bindtap="displayOutTypePopup">
+        <view class="out_type_left">
+          <view class="type_left_top">出行类型</view>
+          <view class="type_left_bottom">{{outTypeName}}</view>
+        </view>
+        <view class="out_type_right">选择</view>
+      </view>
+      <van-action-sheet
+        show="{{ outTypeShow }}"
+        actions="{{ actions }}"
+        title="选择出行类型"
+        bind:close="doClose"
+        bind:select="onSelect"
+      />
+      <view class="form_name">
+        <view class="out_type_left">
+          <view class="type_left_top">姓名</view>
+          <view class="type_left_bottom">请输入姓名</view>
+        </view>
+      </view>
+      <view class="form_idcard_num">
+        <view class="out_type_left">
+          <view class="type_left_top">身份证号</view>
+          <view class="type_left_bottom">请输入身份证号</view>
+        </view>
+      </view>
+      <view class="form_date" bindtap="displayDatePopup">
+        <view class="out_type_left">
+          <view class="type_left_top">出行日期</view>
+          <view class="type_left_bottom">{{outDate}}</view>
+        </view>
+        <view class="out_type_right">选择</view>
+      </view>
+      <van-calendar show="{{ dateShow }}" show-confirm="{{ false }}" default-date='{{defaultDate}}' min-date="{{ minDate }}" max-date="{{ maxDate }}" bind:close="dateClose" bind:confirm="onConfirm" />
+    </view>
+  </view>
+  <view class="search_other">
+    <button class="search_btn" >立即查询</button>
+  </view>
+</view>
+<view class="med_server" wx:if='{{index === 3}}'>
+  <view class="con_item">
+    <view class="con_item_left">
+      <view class="left_title">
+        <text class="title">疫情信息辟谣</text>
+        <text class="sub_title">发布真实信息，揭穿谣言</text>
+      </view>
+      <view class="left_see">
+        <view class="see_btn">立即查看</view>
+      </view>
+    </view>
+    <view class="con_item_right con_item_right_special">
+      <image src="https://img-blog.csdnimg.cn/202007091130419.png"/>
+    </view>
+  </view>
+  <view class="con_item">
+    <view class="con_item_left">
+      <view class="left_title">
+        <text class="title">健康打卡</text>
+        <text class="sub_title">每日健康打卡上报</text>
+      </view>
+      <view class="left_see">
+        <view class="see_btn">立即查看</view>
+      </view>
+    </view>
+    <view class="con_item_right con_item_right_special">
+      <image src="https://img-blog.csdnimg.cn/20200620111116341.png"/>
+    </view>
+  </view>
+  <view class="con_item">
+    <view class="con_item_left">
+      <view class="left_title">
+        <text class="title">防疫知识</text>
+        <text class="sub_title">防疫知识防疫知识防疫知识</text>
+      </view>
+      <view class="left_see">
+        <view class="see_btn">立即查看</view>
+      </view>
+    </view>
+    <view class="con_item_right">
+      <image src="https://img-blog.csdnimg.cn/20200620111116685.png"/>
+    </view>
+  </view>
+  <view class="con_item">
+    <view class="con_item_left">
+      <view class="left_title">
+        <text class="title">防疫资源</text>
+        <text class="sub_title">各地区口罩资源实时监控</text>
+      </view>
+      <view class="left_see">
+        <view class="see_btn">立即查看</view>
+      </view>
+    </view>
+    <view class="con_item_right">
+      <image src="https://img-blog.csdnimg.cn/20200620111116268.png"/>
+    </view>
+  </view>
+  <view class="background_title">
+    <!-- <image src="fight.png"></image> -->
+  </view>
+</view>
+
+
+<van-tabbar 
+  active="{{ active }}" 
+  bind:change="onSwich"
+  active-color="#61a0f8"
+  inactive-color="#3d4247">
+  <van-tabbar-item icon="location-o">我的附近</van-tabbar-item>
+  <van-tabbar-item icon="chart-trending-o">疫情数据</van-tabbar-item>
+  <van-tabbar-item icon="filter-o">同乘查询</van-tabbar-item>
+  <van-tabbar-item icon="shop-collect-o">医药服务</van-tabbar-item>
+</van-tabbar>
+  
+  
+  <!-- <van-popup 
+    show="{{ show }}" 
+    bind:close="onClose"
+    position="bottom"
+    custom-style="height: {{popup}}"
+    round
+    >内容</van-popup> -->
+<!-- </view> -->
